@@ -4,7 +4,7 @@ OpenDU is a python based application with the purpose of creating a community ba
 It uses the PyGame library and Vulkan to render the displays and connects via SimConnect to Flight Simulator or Prepar3D and via TCP through XPlane.
 
 # Pre-requisites
-- Python3 with PiP
+- Python3 with PiP (Package Installer / Manager)
 - PyGame Library (python -m pip install -U pygame --user)
 
 # The Idea
