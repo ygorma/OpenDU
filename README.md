@@ -10,6 +10,8 @@ The goal of this project is to lower the software costs of homecockpit building 
 # Hardware Integration
 In a near future I will make it available a arduino script sample which also connects to OpenDU via TCP IP. The dream is to make a PoE device and make all the pieces on the simulator connected by one single cable.
 
+In a far future, the plan is to make it work with ARINC 429.
+
 # Pre-requisites
 - Python3 with PiP (Package Installer / Manager);
 - PyGame Library (python -m pip install -U pygame --user);
