@@ -8,7 +8,7 @@ It uses the PyGame library and Vulkan to render the displays and connects via TC
 The goal of this project is to lower the software costs of homecockpit building for personal and commercial use.
 
 # Hardware Integration
-In a near future I wil make it available 
+In a near future I will make it available a arduino script sample which also connects to OpenDU via TCP IP. The dream is to make a PoE device and make all the pieces on the simulator connected by one single cable.
 
 # Pre-requisites
 - Python3 with PiP (Package Installer / Manager);
