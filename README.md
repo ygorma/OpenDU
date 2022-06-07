@@ -10,7 +10,7 @@ The goal of this project is to lower the software costs of homecockpit building 
 # Pre-requisites
 - Python3 with PiP (Package Installer / Manager);
 - PyGame Library (python -m pip install -U pygame --user);
-- XPlane 10 or Higher;
+- XPlane 10 or Higher (ESP Engine support is still unavailable);
 - FlyWithLua Plugin (https://forums.x-plane.org/index.php?/files/file/17468-flywithlua-for-xp9-and-xp10/); or
 - FlyWithLua NG (https://forums.x-plane.org/index.php?/files/file/38445-flywithlua-ng-next-generation-edition-for-x-plane-11-win-lin-mac/).
 
