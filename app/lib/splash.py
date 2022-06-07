@@ -6,23 +6,29 @@ class Splash:
 
     def init():
 
-        # Inicializar
+        # Run
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
 
-        # Configuracao da Tela
-        screen = pygame.display.set_mode((800,600),pygame.NOFRAME)
+        # Setup
+        SplashWidth           = 640                     # In Pixels
+        SplashHeight          = 480                     # In Pixels
+        SplashBackgroundColor = [2,24,244]              # In RGB
+        SplashLogoPath        = 'app/media/logo.png'    # Related to main application folder
+
+        # Screen Rendering
+        screen = pygame.display.set_mode((SplashWidth,SplashHeight),pygame.NOFRAME)
         background = pygame.Surface(screen.get_size())
-        background.fill((2,24,244))
+        background.fill(SplashBackgroundColor)
         screen.blit(background, (0,0))
 
-        # Posicionar Logo
-        logoImg = pygame.image.load('app/media/logo.png')
-        logoImgX = (800/2) - logoImg.get_width()/2
-        logoImgY = (600/2) - logoImg.get_height()/2
+        # Logo Positioning
+        logoImg = pygame.image.load(SplashLogoPath)
+        logoImgX = (SplashWidth/2) - logoImg.get_width()/2
+        logoImgY = (SplashHeight/2) - logoImg.get_height()/2
         screen.blit(logoImg, (logoImgX ,logoImgY))
 
-        # Atualizar Tela
+        # Update Screen
         pygame.display.update()
         time.sleep(5)
         pygame.quit()
