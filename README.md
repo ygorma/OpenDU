@@ -3,9 +3,12 @@ Community has proven to be the strong arm of flight sim environment with time, t
 
 OpenDU is a python based application with the purpose of creating a community based display unit of any kind for use within flight simulators, such as Primary Flight Displays, Control Display Units, Instructor Station or even general aviation gauges for use in home cockpits,  
 
-It uses the PyGame library and Vulkan to render the displays and connects via SimConnect to Flight Simulator or Prepar3D and via TCP through XPlane.
+It uses the PyGame library and Vulkan to render the displays and connects via TCP using an in house lua script for use with FSUIPC to Flight Simulator or Prepar3D and via FlyWithLua through XPlane.
 
 The goal of this project is to lower the software costs of homecockpit building for personal and commercial use.
+
+# Hardware Integration
+In a near future I wil make it available 
 
 # Pre-requisites
 - Python3 with PiP (Package Installer / Manager);
