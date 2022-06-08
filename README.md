@@ -1,5 +1,5 @@
 # About OpenDU
-Community has proven to be the strong arm of flight sim environment with time, this enviorioment lacks a freeware, customizable and scalable Display Unit software. In the other hand, Python is one of the most popular programming languages with a very short learning curve and has the advantage to work in multiple platforms, which opens the possibility of getting rid off Windows the most annoying and painful obstacle when working with home cockpits.
+Community has proven to be the strong arm of flight sim environment with time, this enviorioment, lacks a freeware, customizable and scalable Display Unit software. In the other hand, Python is one of the most popular programming languages with a very short learning curve and has the advantage to work in multiple platforms, which opens the possibility of getting rid off Windows, the most annoying and painful obstacle when working with home cockpits.
 
 OpenDU is a python based application with the purpose of creating a community based display unit of any kind for use within flight simulators, such as Primary Flight Displays, Control Display Units, Instructor Station or even general aviation gauges for use in home cockpits,  
 
