@@ -22,5 +22,5 @@ In a far future, the plan is to make it work with ARINC 429.
 # Dev Schedule
 The project is still under development and there is a lot of work to do, so don't expect a working project when you download.
 
-# Developer Team
-Ygor Montenegro
+# Join Our Team
+discord.gg/BE2tgCz2ZT
