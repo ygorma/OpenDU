@@ -23,4 +23,4 @@ In a far future, the plan is to make it work with ARINC 429.
 The project is still under development and there is a lot of work to do, so don't expect a working project when you download.
 
 # Join Our Team
-discord.gg/BE2tgCz2ZT
+Fell free to join our discussion at discord.gg/BE2tgCz2ZT
