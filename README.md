@@ -13,9 +13,10 @@ In a near future I will make it available a arduino script sample which also con
 In a far future, the plan is to make it work with ARINC 429.
 
 # Pre-requisites
-- Python3 with PiP (Package Installer / Manager);
-- PyGame Library (python -m pip install -U pygame --user);
-- XPlane 10 or Higher (ESP Engine support is still unavailable);
+- Python3 (sudo apt-get install python);
+- Python3 PiP (sudo apt-get install python3-pip);
+- PyGame Library (pip install -U pygame --user);
+- XPlane 9 or Higher (ESP Engine support is still unavailable);
 - FlyWithLua Plugin (https://forums.x-plane.org/index.php?/files/file/17468-flywithlua-for-xp9-and-xp10/); or
 - FlyWithLua NG (https://forums.x-plane.org/index.php?/files/file/38445-flywithlua-ng-next-generation-edition-for-x-plane-11-win-lin-mac/).
 
