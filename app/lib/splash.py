@@ -14,7 +14,7 @@ class Splash:
         SplashWidth           = 640                     # In Pixels
         SplashHeight          = 480                     # In Pixels
         SplashBackgroundColor = [2,24,244]              # In RGB
-        SplashLogoPath        = 'app/media/logo.png'    # Related to main application folder
+        SplashLogoPath        = 'app/media/splash.png'  # Related to main application folder
 
         # Screen Rendering
         screen = pygame.display.set_mode((SplashWidth,SplashHeight),pygame.NOFRAME)
