@@ -1,6 +1,7 @@
-background = pygame.Surface(screen.get_size())
-background.fill((0,0,0))
-screen.blit(background, (0,0))
+from suites.instructor.instructor import *
+
+OpenDU.clearScreen()
+Suite.button('Teste', OpenDU.config.get('main','font'), (255,255,255), 0, 0)
 
 
 

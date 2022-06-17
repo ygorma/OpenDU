@@ -1,9 +1,9 @@
-import pygame
-import socket
 import os, sys
 import time
+import socket
 import configparser
 import pickle
+import pygame
 from datetime import datetime
 from app.lib.splash import *
 
@@ -17,16 +17,16 @@ class OpenDU:
         except:
             pass
 
-        # Splash
-        if OpenDU.config.getint('main','splash'):
-            OpenDU.log('INFO', 'Running Splash')
-            Splash.init()
-
         # PyGame Init
         OpenDU.log('INFO', 'Initializing App')
         pygame.init()
         pygame.font.init()
         clock = pygame.time.Clock()
+
+        # Splash
+        if OpenDU.config.getint('main','splash'):
+            OpenDU.log('INFO', 'Running Splash')
+            Splash.run()
 
         # Screen Position
         os.environ['SDL_VIDEO_WINDOW_POS'] = '%i,%i' % (OpenDU.config.getint('main','xposition'),OpenDU.config.getint('main','yposition'))
@@ -42,11 +42,17 @@ class OpenDU:
 
         OpenDU.xsize, OpenDU.ysize = OpenDU.screen.get_size()
 
+        # Try Connection
+        OpenDU.initialConnection()
+
+        # Finish Init
+        OpenDU.log('INFO', 'Initializing Suite')
+
     def kill():
 
         # Terminate TCP Connection
         try:
-            Conn.close()
+            OpenDU.conn.close()
         except:
             OpenDU.log('INFO', 'Connection not closed. Never opened.')
         else:
@@ -84,7 +90,6 @@ class OpenDU:
     def initialConnection():
 
         # Create Connection
-        Conn = socket.socket()
         dots = 3
         dot = '.'
         OpenDU.log('INFO', 'Trying to connect on '+OpenDU.config.get('conn','server')+':'+OpenDU.config.get('conn','port')+'')
@@ -98,7 +103,7 @@ class OpenDU:
             OpenDU.keyPress()
 
             try:
-                Conn.connect((OpenDU.config.get('conn','server'), OpenDU.config.getint('conn','port'))) 
+                OpenDU.conn.connect((OpenDU.config.get('conn','server'), OpenDU.config.getint('conn','port'))) 
                 
             except:
                 # Number of Dots
@@ -110,14 +115,13 @@ class OpenDU:
                 # Print Error
                 OpenDU.text('Trying to Connect on '+ OpenDU.config.get('conn','server') +':'+ OpenDU.config.get('conn','port') + dot*dots, OpenDU.config.get('main','font'), (255,255,255), 10, 10)
                 pygame.display.update()
+                time.sleep(1)
 
             else:
                 OpenDU.text('Connection Acquired!', OpenDU.config.get('main','font'), (255,255,255), 10, 10)
                 OpenDU.log('INFO', 'Connection Acquired!')
                 pygame.display.update()
                 break;
-
-            time.sleep(1)
 
         time.sleep(2)
 
@@ -154,3 +158,7 @@ class OpenDU:
         else:
             OpenDU.screen = pygame.display.set_mode((OpenDU.xsize,OpenDU.ysize),pygame.NOFRAME)
             OpenDU.frame = 0
+
+    def mousePosition():
+
+        return pygame.mouse.get_pos()
