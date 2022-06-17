@@ -6,4 +6,3 @@ class Suite:
 
         defaultPage = getattr(__import__(pagesPath, fromlist=[page]), page)
         defaultPage.eJets.init()
-

@@ -4,11 +4,10 @@ import pygame
 
 class Splash: 
 
-    def init():
+    def run():
 
         # Run
         os.environ['SDL_VIDEO_CENTERED'] = '1'
-        pygame.init()
 
         # Setup
         SplashWidth           = 640                     # In Pixels
@@ -31,4 +30,4 @@ class Splash:
         # Update Screen
         pygame.display.update()
         time.sleep(5)
-        pygame.quit()
+        pygame.display.quit()
