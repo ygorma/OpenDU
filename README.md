@@ -12,7 +12,7 @@ In a near future I will make it available a arduino script sample which also con
 
 In a far future, the plan is to make it work with ARINC 429.
 
-# Pre-requisites - X-Plane
+# Pre-requisites
 - Python3 (sudo apt-get install python);
 - Python3 PiP (sudo apt-get install python3-pip);
 - PyGame Library (pip install -U pygame --user);
