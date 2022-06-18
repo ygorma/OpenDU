@@ -4,6 +4,8 @@ import socket
 import configparser
 import pickle
 import pygame
+from pygame import gfxdraw
+import math
 from datetime import datetime
 from app.lib.splash import *
 
@@ -35,10 +37,13 @@ class OpenDU:
         # Screen Setup
         pygame.display.set_caption('OpenDU - ' + OpenDU.config.get('main','window_name'))
 
-        if OpenDU.frame == 1:
-            OpenDU.screen = pygame.display.set_mode((OpenDU.config.getint('main','xsize'),OpenDU.config.getint('main','ysize')),pygame.RESIZABLE)
+        if OpenDU.fullscreen == 1:
+            OpenDU.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
         else:
-            OpenDU.screen = pygame.display.set_mode((OpenDU.config.getint('main','xsize'),OpenDU.config.getint('main','ysize')),pygame.NOFRAME)                                                                           
+            if OpenDU.frame == 1:
+                OpenDU.screen = pygame.display.set_mode((OpenDU.config.getint('main','xsize'),OpenDU.config.getint('main','ysize')),pygame.RESIZABLE)
+            else:
+                OpenDU.screen = pygame.display.set_mode((OpenDU.config.getint('main','xsize'),OpenDU.config.getint('main','ysize')),pygame.NOFRAME)                                                 
 
         OpenDU.xsize, OpenDU.ysize = OpenDU.screen.get_size()
 
@@ -131,9 +136,28 @@ class OpenDU:
 
     def text(text, font, color, xposition, yposition):
 
-        myfont = pygame.font.SysFont(font, 30)
-        textsurface = myfont.render(text, True, color)
-        OpenDU.screen.blit(textsurface,(xposition,yposition))
+        size = 30
+
+        lines = text.split("\n ")
+        lineQty = len(lines)
+
+        if (lineQty % 2) == 0:
+            startPositionY = yposition-(lineQty * size)
+
+            for line in lines:
+                myfont = pygame.font.SysFont(font, size)
+                textsurface = myfont.render(line, True, color)
+                OpenDU.screen.blit(textsurface,(xposition,startPositionY))
+                startPositionY += size
+
+        else: 
+            startPositionY = yposition-(lineQty * size)       
+            for line in lines:
+                myfont = pygame.font.SysFont(font, size)
+                textsurface = myfont.render(line, True, color)
+                OpenDU.screen.blit(textsurface,(xposition,yposition))
+                startPositionY += size
+
 
     def keyPress():
 
@@ -143,6 +167,8 @@ class OpenDU:
                     OpenDU.kill()
                 if event.key == pygame.K_TAB:    #TAB
                     OpenDU.frameChange()
+                if event.key == pygame.K_RETURN:
+                    OpenDU.frameFullscreen()
             if event.type == pygame.QUIT:
                 OpenDU.kill()
             if event.type == pygame.VIDEORESIZE:
@@ -153,12 +179,20 @@ class OpenDU:
     def frameChange():
 
         if OpenDU.frame == 0:
-            OpenDU.screen = pygame.display.set_mode((OpenDU.xsize,OpenDU.ysize),pygame.RESIZABLE)
+            OpenDU.screen = pygame.display.set_mode((OpenDU.screen.get_width(),OpenDU.screen.get_height()),pygame.RESIZABLE)
             OpenDU.frame = 1
         else:
-            OpenDU.screen = pygame.display.set_mode((OpenDU.xsize,OpenDU.ysize),pygame.NOFRAME)
+            OpenDU.screen = pygame.display.set_mode((OpenDU.screen.get_width(),OpenDU.screen.get_height()),pygame.NOFRAME)
             OpenDU.frame = 0
 
-    def mousePosition():
+    def frameFullscreen():
 
-        return pygame.mouse.get_pos()
+        if OpenDU.fullscreen == 0:
+            pygame.display.set_mode((0, 0))
+            pygame.display.toggle_fullscreen()
+            OpenDU.fullscreen = 1
+        else:
+            pygame.display.toggle_fullscreen()
+            pygame.display.set_mode((OpenDU.config.getint('main','xsize'),OpenDU.config.getint('main','ysize')))
+            os.environ['SDL_VIDEO_WINDOW_POS'] = '%i,%i' % (OpenDU.config.getint('main','xposition'),OpenDU.config.getint('main','yposition'))
+            OpenDU.fullscreen = 0
