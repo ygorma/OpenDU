@@ -12,8 +12,10 @@ OpenDU.suitePackage     = 'suites.' + OpenDU.config.get('main','suite') + ''
 OpenDU.suite            = OpenDU.config.get('main','suite')
 OpenDU.suitePath        = 'suites/' + OpenDU.suite  + '/'
 OpenDU.pages            = OpenDU.suitePath + 'pages/'
+OpenDU.actualPage       = OpenDU.config.get('main','page')
 OpenDU.textures         = OpenDU.suitePath + 'texture/'
 OpenDU.frame            = OpenDU.config.getint('main','frame')
+OpenDU.fullscreen       = OpenDU.config.getint('main','fullscreen')
 OpenDU.conn             = socket.socket()
 
 # Run PyGame
@@ -35,7 +37,7 @@ while True:
 
     # Import Display
     imported = getattr(__import__(OpenDU.suitePackage, fromlist=[OpenDU.suite]), OpenDU.suite)
-    imported.Suite.init(OpenDU.config.get('main','page'))
+    imported.Suite.init(OpenDU.actualPage)
 
     # Update Screen
     pygame.display.update() 
