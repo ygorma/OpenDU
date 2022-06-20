@@ -5,7 +5,7 @@ OpenDU is a python based application with the purpose of creating a community ba
 
 It uses the PyGame library and Vulkan to render the displays and connects via TCP using an in house lua script for use with FSUIPC to Flight Simulator or Prepar3D and via FlyWithLua through XPlane.
 
-The goal of this project is to lower the software costs of homecockpit building for personal and commercial use.
+**The goal of this project is to lower the software costs of homecockpit building for personal and commercial use.**
 
 # Hardware Integration
 In a near future I will make it available a arduino script sample which also connects to OpenDU via TCP IP. The dream is to make a PoE device and make all the pieces on the simulator connected by one single cable.
@@ -13,9 +13,9 @@ In a near future I will make it available a arduino script sample which also con
 In a far future, the plan is to make it work with ARINC 429.
 
 # Pre-requisites
-- Python3 (sudo apt-get install python);
-- Python3 PiP (sudo apt-get install python3-pip);
-- PyGame Library (pip install -U pygame --user);
+- Python3 (`sudo apt-get install python`);
+- Python3 PiP (`sudo apt-get install python3-pip`);
+- PyGame Library (`pip install -U pygame --user`);
 - FS2004 or Higher; or
 - XPlane 9 or Higher;
 - FlyWithLua Plugin (https://forums.x-plane.org/index.php?/files/file/17468-flywithlua-for-xp9-and-xp10/); or
