@@ -21,6 +21,9 @@ class Splash:
         background.fill(SplashBackgroundColor)
         screen.blit(background, (0,0))
 
+        # Set Icon
+        pygame.display.set_icon(pygame.image.load('app\media\icon.png'))
+
         # Logo Positioning
         logoImg = pygame.image.load(SplashLogoPath)
         logoImgX = (SplashWidth/2) - logoImg.get_width()/2

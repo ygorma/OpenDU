@@ -16,6 +16,7 @@ OpenDU.actualPage       = OpenDU.config.get('main','page')
 OpenDU.textures         = OpenDU.suitePath + 'texture/'
 OpenDU.frame            = OpenDU.config.getint('main','frame')
 OpenDU.fullscreen       = OpenDU.config.getint('main','fullscreen')
+OpenDU.brightness       = OpenDU.config.getint('main','brightness')
 OpenDU.conn             = socket.socket()
 
 # Run PyGame
@@ -38,6 +39,14 @@ while True:
     # Import Display
     imported = getattr(__import__(OpenDU.suitePackage, fromlist=[OpenDU.suite]), OpenDU.suite)
     imported.Suite.init(OpenDU.actualPage)
+
+    # Print FPS
+    OpenDU.fpsCounter()
+
+    # Brightness Adjustment
+    rect = pygame.Surface((OpenDU.screen.get_width(),OpenDU.screen.get_height()), pygame.SRCALPHA, 32)
+    rect.fill((0, 0, 0, OpenDU.brightness))
+    OpenDU.screen.blit(rect, (0,0))
 
     # Update Screen
     pygame.display.update() 
