@@ -19,14 +19,5 @@ class Instructor:
 
         quickActions = Suite.menu((0,0,0), 20, 410, 0, pageBegin[0], 'left', 'top', 110, 110, options)
 
-        surface = pygame.image.load(OpenDU.suitePath+'/texture/plane_90.png')
-        OpenDU.screen.blit(surface,(100,quickActions[1] + 100))
-
-        surface = pygame.image.load(OpenDU.suitePath+'/texture/plane_90.png')
-        OpenDU.screen.blit(surface,(400,quickActions[1] + 100))
-
-        surface = pygame.image.load(OpenDU.suitePath+'/texture/plane_90.png')
-        OpenDU.screen.blit(surface,(700,quickActions[1] + 100))
-
         Suite.renderBottomMenu()
         Suite.dialogs()

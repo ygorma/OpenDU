@@ -10,10 +10,15 @@ class Suite:
     comboBoxIsOpen = 0
     comboBoxText = None
     comboBoxFunction = None
+    keyboardIsOpen = 0
+    keyboardText = None
+    keyboardFunction = None
+    font = 'suites/instructor/Geneva.ttf'
 
-    refAirport = ""
-    activeRunway = ""
+    activeAirport = OpenDU.config.get('lastflight','airport')
+    activeRunway = OpenDU.config.get('lastflight','runway')
     runwaysCache = ""
+    scratchpadText = ""
 
     def init(page):
 
@@ -193,6 +198,8 @@ class Suite:
 
     def alert(text, function, color):
 
+        print(2)
+
         Suite.dialogIsOpen = 1
         Suite.alertIsOpen = 1
         Suite.alertText = text
@@ -201,13 +208,13 @@ class Suite:
 
     def alertClose(function):
 
-        eval(function)
-
         Suite.dialogIsOpen = 0
         Suite.alertIsOpen = 0
         Suite.alertText = None
         Suite.alertFunction = None
         Suite.alertColor = None
+
+        eval(function)
 
     def comboBox(title, function): 
 
@@ -226,6 +233,24 @@ class Suite:
         Suite.comboBoxIsOpen = 0
         Suite.comboBoxText = None
         Suite.comboBoxFunction = None
+
+    def keyboard(title, function): 
+
+        # funtion must return a list
+
+        Suite.dialogIsOpen = 1
+        Suite.keyboardIsOpen = 1
+        Suite.keyboardText = title
+        Suite.keyboardFunction = function
+
+    def keyboardClose(): 
+
+        print(1)
+
+        Suite.dialogIsOpen = 0
+        Suite.keyboardIsOpen = 0
+        Suite.keyboardText = None
+        Suite.keyboardFunction = None
 
     def dialogs():
 
@@ -291,6 +316,131 @@ class Suite:
                 options = eval(Suite.comboBoxFunction)
 
                 Suite.menu((82,74,66), 0, sizex, positionx, positiony, 'left', 'top', sizex, sizey, options, True)
+
+            if Suite.keyboardIsOpen:
+
+                fontSize = 30
+                sizex = 60
+                sizey = 60
+                columns = 13
+                menuMargin = 10
+                menuSizeX = (sizex*columns)+(menuMargin*columns)+menuMargin
+                positionx = (OpenDU.screen.get_width() - menuSizeX)/2
+                positiony = 100
+
+                COLOR_TEXT = (255,255,255)
+                COLOR_BUTTON_BORDER = (115,107,107)
+
+                # Fake Text
+                myfont = pygame.font.SysFont(Suite.font, fontSize)
+                textsurface = myfont.render(Suite.keyboardText, True, COLOR_TEXT)
+
+                # Adjustments
+                textXposition = positionx + menuSizeX/2 - textsurface.get_rect().width/2
+
+                # Menu Title
+                OpenDU.text(Suite.keyboardText, Suite.font, COLOR_TEXT, textXposition, positiony, fontSize)
+
+                # Scratchpad
+                positiony = positiony + 50
+                myfont = pygame.font.SysFont(Suite.font, 30)
+                textsurface = myfont.render(Suite.scratchpadText, True, COLOR_TEXT)
+
+                ysize = 60
+                border = 5
+
+                # Adjustments
+                textXposition = positionx + menuSizeX/2 - textsurface.get_rect().width/2
+                textYposition = positiony + (ysize/2) - (textsurface.get_rect().height/2)
+
+                # Colors
+                COLOR_BUTTON_BORDER = (115,107,107)
+
+                # Rectangular
+                rect = pygame.Rect(positionx, positiony, menuSizeX, ysize)
+                rectBorder = pygame.Rect(positionx, positiony, menuSizeX, ysize)
+                pygame.draw.rect(OpenDU.screen, COLOR_BUTTON_BORDER, rectBorder, border)
+
+                # Text
+                OpenDU.text(Suite.scratchpadText, Suite.font, COLOR_TEXT, textXposition, textYposition)
+
+                # Keys
+                options = [
+                    ["0", "Suite.scratchpad('0')"], 
+                    ["1", "Suite.scratchpad('1')"], 
+                    ["2", "Suite.scratchpad('2')"], 
+                    ["3", "Suite.scratchpad('3')"], 
+                    ["4", "Suite.scratchpad('4')"], 
+                    ["5", "Suite.scratchpad('5')"], 
+                    ["6", "Suite.scratchpad('6')"], 
+                    ["7", "Suite.scratchpad('7')"], 
+                    ["8", "Suite.scratchpad('8')"], 
+                    ["9", "Suite.scratchpad('9')"], 
+                    ["+", "Suite.scratchpad('+')"], 
+                    ["-", "Suite.scratchpad('-')"], 
+                    ["<-", "Suite.scratchpad('ERASE')"], # Line one
+                    ["Q", "Suite.scratchpad('Q')"], 
+                    ["W", "Suite.scratchpad('W')"], 
+                    ["E", "Suite.scratchpad('E')"], 
+                    ["R", "Suite.scratchpad('R')"], 
+                    ["T", "Suite.scratchpad('T')"], 
+                    ["Y", "Suite.scratchpad('Y')"], 
+                    ["U", "Suite.scratchpad('U')"], 
+                    ["I", "Suite.scratchpad('I')"], 
+                    ["O", "Suite.scratchpad('O')"], 
+                    ["P", "Suite.scratchpad('P')"], 
+                    ["[", "Suite.scratchpad('[')"], 
+                    ["]", "Suite.scratchpad(']')"], 
+                    ["*", "Suite.scratchpad('*')"],  # Line Two
+                    ["A", "Suite.scratchpad('A')"], 
+                    ["S", "Suite.scratchpad('S')"], 
+                    ["D", "Suite.scratchpad('D')"], 
+                    ["F", "Suite.scratchpad('F')"], 
+                    ["G", "Suite.scratchpad('G')"], 
+                    ["H", "Suite.scratchpad('H')"], 
+                    ["J", "Suite.scratchpad('J')"], 
+                    ["K", "Suite.scratchpad('K')"], 
+                    ["L", "Suite.scratchpad('L')"], 
+                    [";", "Suite.scratchpad(';')"], 
+                    ["{", "Suite.scratchpad('{')"], 
+                    ["}", "Suite.scratchpad('}')"], 
+                    ["/", "Suite.scratchpad('/')"],  # Line Three
+                    ["Z", "Suite.scratchpad('Z')"], 
+                    ["X", "Suite.scratchpad('X')"], 
+                    ["C", "Suite.scratchpad('C')"], 
+                    ["V", "Suite.scratchpad('V')"], 
+                    ["B", "Suite.scratchpad('B')"], 
+                    ["N", "Suite.scratchpad('N')"], 
+                    ["M", "Suite.scratchpad('M')"], 
+                    [",", "Suite.scratchpad(',')"], 
+                    [".", "Suite.scratchpad('.')"], 
+                    [":", "Suite.scratchpad(':')"], 
+                    ["\"", "Suite.scratchpad('\"')"], 
+                    ["?", "Suite.scratchpad('?')"], 
+                    ["=", "Suite.scratchpad('=')"],  # Line Four
+                ]
+
+                keyboard = Suite.menu((82,74,66), menuMargin, menuSizeX, positionx, positiony + 100, 'left', 'top', sizex, sizey, options, True)
+                positiony = keyboard[1]
+
+                # Options
+
+                options = [
+                    ["Clear", "Suite.scratchpad('CLEAR')"], 
+                    ["Cancel", "Suite.keyboardClose()"], 
+                    ["Search", ""+Suite.keyboardFunction+""], 
+                ]
+
+                Suite.menu((82,74,66), menuMargin, menuSizeX, positionx, positiony + 30, 'left', 'top', 293.3, sizey, options, True)
+
+    def scratchpad(text):
+
+        if text == "ERASE":
+            Suite.scratchpadText = Suite.scratchpadText[:-1]
+        elif text == "CLEAR":
+            Suite.scratchpadText = ""
+        else:
+            Suite.scratchpadText += text
     
     def clock(menuLimits):
 
@@ -320,7 +470,7 @@ class Suite:
 
     def navdataRunways():
 
-        Airports = re.search("(A,KLAX)(.+?)(\n\n)", OpenDU.navdataAirports, re.DOTALL)
+        Airports = re.search("(A,"+Suite.activeAirport+")(.+?)(\n\n)", OpenDU.navdataAirports, re.DOTALL)
         Airports = Airports.group(0).split("\n")
         runwaysCache = []
 
@@ -331,15 +481,37 @@ class Suite:
 
                 runwaysCache.append(["RWY "+runwayData[1]+"", "Suite.comboBoxClose('activeRunway', '"+runwayData[1]+"')"])
 
+        runwaysCache.append(["Cancel", "Suite.comboBoxClose('activeRunway', '"+Suite.activeRunway+"')"])
+
         return runwaysCache
 
-    def navdataAirport():
+    def navdataSearchAirport():
 
-        string = '(A,'+OpenDU.config.get('lastflight','airport')+')(.+?)(\n)';
+        if Suite.scratchpadText == '':
+            Suite.keyboardClose()
+            Suite.alert('Airport ICAO cannot be blank.','Suite.keyboard("Airport ICAO", "Suite.navdataSearchAirport()")',(82,74,66))
 
-        textfile = open('navdata\Airports.txt', 'r')
-        filetext = textfile.read()
-        textfile.close()
-        matches = re.match(string, filetext)
+        else:
+
+            Airport = re.search("(A,"+Suite.scratchpadText+")(.+?)(\n\n)", OpenDU.navdataAirports, re.DOTALL)
+
+            if Airport:
+
+                Airport = Airport.group(0).split("\n")
+
+                # Autoselect existing runway
+
+                for runway in Airport:
+                    if runway.startswith('R,'):
+                        runwayData = runway.split(",")
+                        Suite.activeRunway = runwayData[1]
+
+                Suite.keyboardClose()
+                Suite.activeAirport = Suite.scratchpadText
+                Suite.scratchpadText = ""
+            
+            else:
+                Suite.keyboardClose()
+                Suite.alert(Suite.scratchpadText+' was not found!','Suite.keyboard("Airport ICAO", "Suite.navdataSearchAirport()")',(82,74,66))
 
         
