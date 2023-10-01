@@ -13,7 +13,8 @@ class Suite:
     keyboardIsOpen = 0
     keyboardText = None
     keyboardFunction = None
-    font = 'suites/instructor/Geneva.ttf'
+    font = OpenDU.suitePath + "fonts\\Geneva.ttf"
+    fontSize = 20
 
     activeAirport = OpenDU.config.get('lastflight','airport')
     activeRunway = OpenDU.config.get('lastflight','runway')
@@ -29,7 +30,7 @@ class Suite:
     def button(text, font, fontSize, color, xposition, yposition, xsize, ysize, border, function, active=0):
 
         # Fake Text
-        myfont = pygame.font.SysFont(font, fontSize)
+        myfont = pygame.font.Font(font, fontSize)
         textsurface = myfont.render(text, True, color)
 
         # Adjustments
@@ -49,7 +50,7 @@ class Suite:
         pygame.draw.rect(OpenDU.screen, COLOR_BUTTON_BORDER, rectBorder, border)
 
         # Text
-        OpenDU.text(text, font, color, textXposition, textYposition)
+        OpenDU.text(text, font, color, textXposition, textYposition, fontSize)
 
         # Is Active
         if active:
@@ -70,7 +71,7 @@ class Suite:
     def buttonDialog(text, font, fontSize, color, xposition, yposition, xsize, ysize, border, function):
 
         # Fake Text
-        myfont = pygame.font.SysFont(font, fontSize)
+        myfont = pygame.font.Font(font, fontSize)
         textsurface = myfont.render(text, True, color)
 
         # Adjustments
@@ -89,7 +90,7 @@ class Suite:
         pygame.draw.rect(OpenDU.screen, COLOR_BUTTON_BORDER, rectBorder, border)
 
         # Text
-        OpenDU.text(text, font, color, textXposition, textYposition)
+        OpenDU.text(text, font, color, textXposition, textYposition, fontSize)
 
         # Is Hover
         if button.collidepoint(pygame.mouse.get_pos()):
@@ -139,20 +140,20 @@ class Suite:
                 try:
                     items[id][2]
                 except:
-                    Suite.buttonDialog(items[id][0], 'suites/instructor/Geneva.ttf', 30, (255,255,255), Actualx, Actualy, itemsXsize, itemsYsize, 3, items[id][1])
+                    Suite.buttonDialog(items[id][0], Suite.font, Suite.fontSize, (255,255,255), Actualx, Actualy, itemsXsize, itemsYsize, 3, items[id][1])
                         
                 else:        
-                    Suite.buttonDialog(items[id][0], 'suites/instructor/Geneva.ttf', 30, (255,255,255), Actualx, Actualy, itemsXsize, itemsYsize, 3, items[id][1], OpenDU.activePage(items[id][2]))
+                    Suite.buttonDialog(items[id][0], Suite.font, Suite.fontSize, (255,255,255), Actualx, Actualy, itemsXsize, itemsYsize, 3, items[id][1], OpenDU.activePage(items[id][2]))
 
             else:
 
                 try:
                     items[id][2]
                 except:
-                    Suite.button(items[id][0], 'suites/instructor/Geneva.ttf', 30, (255,255,255), Actualx, Actualy, itemsXsize, itemsYsize, 3, items[id][1])
+                    Suite.button(items[id][0], Suite.font, Suite.fontSize, (255,255,255), Actualx, Actualy, itemsXsize, itemsYsize, 3, items[id][1])
                         
                 else:        
-                    Suite.button(items[id][0], 'suites/instructor/Geneva.ttf', 30, (255,255,255), Actualx, Actualy, itemsXsize, itemsYsize, 3, items[id][1], OpenDU.activePage(items[id][2]))
+                    Suite.button(items[id][0], Suite.font, Suite.fontSize, (255,255,255), Actualx, Actualy, itemsXsize, itemsYsize, 3, items[id][1], OpenDU.activePage(items[id][2]))
             
             # Next Item
             Actualx += itemsXsize + menuMargin
@@ -263,7 +264,6 @@ class Suite:
 
             if Suite.alertIsOpen:
 
-                fontSize = 30
                 sizex = 640
                 sizey = 280
                 positionx = (OpenDU.screen.get_width() - sizex)/2
@@ -273,7 +273,7 @@ class Suite:
                 COLOR_BUTTON_BORDER = (115,107,107)
 
                 # Fake Text
-                myfont = pygame.font.SysFont('suites/instructor/Geneva.ttf', fontSize)
+                myfont = pygame.font.Font(Suite.font, Suite.fontSize)
                 textsurface = myfont.render(Suite.alertText, True, COLOR_TEXT)
 
                 # Adjustments
@@ -287,14 +287,13 @@ class Suite:
                 pygame.draw.rect(OpenDU.screen, COLOR_BUTTON_BORDER, rectBorder, 10)
 
                 # Text Placing
-                OpenDU.text(Suite.alertText, 'suites/instructor/Geneva.ttf', COLOR_TEXT, textXposition, textYposition - 35, fontSize)
+                OpenDU.text(Suite.alertText, Suite.font, COLOR_TEXT, textXposition, textYposition - 35, Suite.fontSize)
 
                 # Button
-                Suite.buttonDialog("OK", 'suites/instructor/Geneva.ttf', 30, COLOR_TEXT, (positionx+(sizex/2))-125, (positiony+sizey)-100, 250, 40, 3, 'Suite.alertClose(\''+Suite.alertFunction+'\')' )
+                Suite.buttonDialog("OK", Suite.font, Suite.fontSize, COLOR_TEXT, (positionx+(sizex/2))-125, (positiony+sizey)-100, 250, 40, 3, 'Suite.alertClose(\''+Suite.alertFunction+'\')' )
 
             if Suite.comboBoxIsOpen:
 
-                fontSize = 30
                 sizex = 300
                 sizey = 60
                 positionx = (OpenDU.screen.get_width() - sizex)/2
@@ -304,14 +303,14 @@ class Suite:
                 COLOR_BUTTON_BORDER = (115,107,107)
 
                 # Fake Text
-                myfont = pygame.font.SysFont('suites/instructor/Geneva.ttf', fontSize)
+                myfont = pygame.font.Font(Suite.font, Suite.fontSize)
                 textsurface = myfont.render(Suite.comboBoxText, True, COLOR_TEXT)
 
                 # Adjustments
                 textXposition = positionx + sizex/2 - textsurface.get_rect().width/2
 
                 # Text Placing
-                OpenDU.text(Suite.comboBoxText, 'suites/instructor/Geneva.ttf', COLOR_TEXT, textXposition, positiony - 50, fontSize)
+                OpenDU.text(Suite.comboBoxText, Suite.font, COLOR_TEXT, textXposition, positiony - 50, Suite.fontSize)
 
                 options = eval(Suite.comboBoxFunction)
 
@@ -319,7 +318,6 @@ class Suite:
 
             if Suite.keyboardIsOpen:
 
-                fontSize = 30
                 sizex = 60
                 sizey = 60
                 columns = 13
@@ -332,18 +330,18 @@ class Suite:
                 COLOR_BUTTON_BORDER = (115,107,107)
 
                 # Fake Text
-                myfont = pygame.font.SysFont(Suite.font, fontSize)
+                myfont = pygame.font.Font(Suite.font, Suite.fontSize)
                 textsurface = myfont.render(Suite.keyboardText, True, COLOR_TEXT)
 
                 # Adjustments
                 textXposition = positionx + menuSizeX/2 - textsurface.get_rect().width/2
 
                 # Menu Title
-                OpenDU.text(Suite.keyboardText, Suite.font, COLOR_TEXT, textXposition, positiony, fontSize)
+                OpenDU.text(Suite.keyboardText, Suite.font, COLOR_TEXT, textXposition, positiony, Suite.fontSize)
 
                 # Scratchpad
                 positiony = positiony + 50
-                myfont = pygame.font.SysFont(Suite.font, 30)
+                myfont = pygame.font.Font(Suite.font, Suite.fontSize)
                 textsurface = myfont.render(Suite.scratchpadText, True, COLOR_TEXT)
 
                 ysize = 60
@@ -362,7 +360,7 @@ class Suite:
                 pygame.draw.rect(OpenDU.screen, COLOR_BUTTON_BORDER, rectBorder, border)
 
                 # Text
-                OpenDU.text(Suite.scratchpadText, Suite.font, COLOR_TEXT, textXposition, textYposition)
+                OpenDU.text(Suite.scratchpadText, Suite.font, COLOR_TEXT, textXposition, textYposition, Suite.fontSize)
 
                 # Keys
                 options = [
@@ -452,7 +450,7 @@ class Suite:
         COLOR_BORDER = (115,107,107)
 
         # Fake Text
-        myfont = pygame.font.SysFont('suites/instructor/Geneva.ttf', 30)
+        myfont = pygame.font.Font(Suite.font, Suite.fontSize)
         textsurface = myfont.render(clockTime, True, (255,255,255))
 
         # Adjustments
@@ -466,7 +464,7 @@ class Suite:
         pygame.draw.rect(OpenDU.screen, COLOR_BORDER, rectBorder, 3)
 
         # Text Placing
-        OpenDU.text(clockTime, 'suites/instructor/Geneva.ttf', (255,255,255), textXposition, textYposition, 30)
+        OpenDU.text(clockTime, Suite.font, (255,255,255), textXposition, textYposition, Suite.fontSize)
 
     def navdataRunways():
 

@@ -132,12 +132,12 @@ class OpenDU:
                     dots += 1
 
                 # Print Error
-                OpenDU.text('Trying to Connect on '+ OpenDU.config.get('conn','server') +':'+ OpenDU.config.get('conn','port') + dot*dots, OpenDU.config.get('main','font'), (255,255,255), 10, 10)
+                OpenDU.text('Trying to Connect on '+ OpenDU.config.get('conn','server') +':'+ OpenDU.config.get('conn','port') + dot*dots, OpenDU.path + OpenDU.config.get('main','font'), (255,255,255), 10, 10)
                 pygame.display.update()
                 time.sleep(1)
 
             else:
-                OpenDU.text('Connection Acquired!', OpenDU.config.get('main','font'), (255,255,255), 10, 10)
+                OpenDU.text('Connection Acquired!', OpenDU.path + OpenDU.config.get('main','font'), (255,255,255), 10, 10)
                 OpenDU.log('INFO', 'Connection Acquired!')
                 pygame.display.update()
                 break;
@@ -157,7 +157,7 @@ class OpenDU:
             startPositionY = yposition-(lineQty * size)
 
             for line in lines:
-                myfont = pygame.font.SysFont(font, size)
+                myfont = pygame.font.Font(font, size)
                 textsurface = myfont.render(line, True, color)
                 OpenDU.screen.blit(textsurface,(xposition,startPositionY))
                 startPositionY += size
@@ -165,7 +165,7 @@ class OpenDU:
         else: 
             startPositionY = yposition-(lineQty * size)       
             for line in lines:
-                myfont = pygame.font.SysFont(font, size)
+                myfont = pygame.font.Font(font, size)
                 textsurface = myfont.render(line, True, color)
                 OpenDU.screen.blit(textsurface,(xposition,yposition))
                 startPositionY += size
@@ -257,4 +257,4 @@ class OpenDU:
         if OpenDU.config.getint('main','showfps') == 1:
             OpenDU.clock.tick()
             fps = str(int(OpenDU.clock.get_fps()))
-            OpenDU.text(fps, OpenDU.config.get('main','font'), (74,230,66), 10, 10, 15)
+            OpenDU.text(fps, OpenDU.path + OpenDU.config.get('main','font'), (74,230,66), 10, 10, 15)
