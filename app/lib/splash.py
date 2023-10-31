@@ -22,10 +22,10 @@ class Splash:
         screen.blit(background, (0,0))
 
         # Set Icon
-        pygame.display.set_icon(pygame.image.load('app\media\icon.png'))
+        pygame.display.set_icon(pygame.image.load('app\media\icon.png').convert())
 
         # Logo Positioning
-        logoImg = pygame.image.load(SplashLogoPath)
+        logoImg = pygame.image.load(SplashLogoPath).convert()
         logoImgX = (SplashWidth/2) - logoImg.get_width()/2
         logoImgY = (SplashHeight/2) - logoImg.get_height()/2
         screen.blit(logoImg, (logoImgX ,logoImgY))

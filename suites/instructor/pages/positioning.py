@@ -5,29 +5,31 @@ class Instructor:
 
     def init():
 
-        OpenDU.clearScreen()
-
         pageBegin = Suite.renderMenu()
 
+        # Airport Selection
+
+        OpenDU.text("Airport Selection", Suite.font, (255,255,255), 20, pageBegin[0] + 25, Suite.fontSize)
+
         options = [
-            [Suite.activeAirport,"Suite.keyboard('Airport ICAO', 'Suite.navdataSearchAirport()')"], 
+            [Suite.activeAirport,"Suite.keyboard('Airport ICAO', 'Suite.navdataSearchAirport()', 'Search')"], 
             ["RWY "+Suite.activeRunway,"Suite.comboBox('Runway Selection', 'Suite.navdataRunways()')"],
-            ["Exit","action"]
+            ["GATE "+Suite.activeGate,"Suite.comboBox('Gate Selection', 'Suite.navdataGates()')"]
         ]
 
-        quickActions = Suite.menu((0,0,0), 20, 350, 0, pageBegin[0], 'left', 'top', 110, 110, options)
+        quickActions = Suite.menu((0,0,0), 20, 450, 0, pageBegin[0] + 50, 'left', 'top', 110, 110, options)
 
-        surface = pygame.image.load(OpenDU.suitePath+'/texture/plane_90.png')
-        OpenDU.screen.blit(surface,(100,quickActions[1] + 100))
+        # Pushback Options
 
-        surface = pygame.image.load(OpenDU.suitePath+'/texture/plane_90.png')
-        OpenDU.screen.blit(surface,(400,quickActions[1] + 100))
+        OpenDU.text("Pushback Options", Suite.font, (255,255,255), 450, pageBegin[0] + 25, Suite.fontSize)
 
-        surface = pygame.image.load(OpenDU.suitePath+'/texture/plane_90.png')
-        OpenDU.screen.blit(surface,(700,quickActions[1] + 100))
+        options = [
+            ["Left","action"], 
+            ["Center","action"],
+            ["Right","action"]
+        ]
 
-        surface = pygame.image.load(OpenDU.suitePath+'/texture/runway.png')
-        OpenDU.screen.blit(surface,(1000,quickActions[1] - 120))
+        pushbackActions = Suite.menu((0,0,0), 20, 450, 430, pageBegin[0] + 50, 'left', 'top', 110, 110, options)
 
         Suite.renderBottomMenu()
         Suite.dialogs()

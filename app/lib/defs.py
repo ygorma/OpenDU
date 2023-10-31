@@ -11,6 +11,7 @@ import csv
 from datetime import datetime
 from app.lib.splash import *
 import re
+from html.parser import HTMLParser
 
 class OpenDU:
 
@@ -51,15 +52,16 @@ class OpenDU:
         OpenDU.xsize, OpenDU.ysize = OpenDU.screen.get_size()
 
         # Set Icon
-        pygame.display.set_icon(pygame.image.load('app\media\icon.png'))
+        pygame.display.set_icon(pygame.image.load('app\media\icon.png').convert())
 
         # Load Navdata
         Airports = open('navdata/Airports.txt', 'r')
         OpenDU.navdataAirports = Airports.read()
         Airports.close()
 
-        # Try Connection
-        OpenDU.initialConnection()
+        # Connection with Simulator
+        if OpenDU.config.getint('main','standalone') == 0:
+            OpenDU.initialConnection()
 
         # Finish Init
         OpenDU.log('INFO', 'Initializing Suite')
@@ -132,12 +134,12 @@ class OpenDU:
                     dots += 1
 
                 # Print Error
-                OpenDU.text('Trying to Connect on '+ OpenDU.config.get('conn','server') +':'+ OpenDU.config.get('conn','port') + dot*dots, OpenDU.path + OpenDU.config.get('main','font'), (255,255,255), 10, 10)
+                OpenDU.text('Trying to Connect on '+ OpenDU.config.get('conn','server') +':'+ OpenDU.config.get('conn','port') + dot*dots, OpenDU.path + OpenDU.config.get('main','font'), (255,255,255), 10, 10, 15)
                 pygame.display.update()
                 time.sleep(1)
 
             else:
-                OpenDU.text('Connection Acquired!', OpenDU.path + OpenDU.config.get('main','font'), (255,255,255), 10, 10)
+                OpenDU.text('Connection Acquired!', OpenDU.path + OpenDU.config.get('main','font'), (255,255,255), 10, 10, 15)
                 OpenDU.log('INFO', 'Connection Acquired!')
                 pygame.display.update()
                 break;
@@ -147,29 +149,48 @@ class OpenDU:
     def clearScreen():
 
         OpenDU.screen.fill((0,0,0))
+        OpenDU.xsize, OpenDU.ysize = OpenDU.screen.get_size()
 
-    def text(text, font, color, xposition, yposition, size=30):
+    def text(text, font, color=(255,255,255), xposition=0, yposition=0, size=30, anchor="left", align="center", return_size=False):
 
-        lines = text.split("\\")
-        lineQty = len(lines)
+        lines = text.split("<br>")
 
-        if (lineQty % 2) == 0:
-            startPositionY = yposition-(lineQty * size)
+        needed_width = 0
+        needed_height = 0
 
-            for line in lines:
-                myfont = pygame.font.Font(font, size)
-                textsurface = myfont.render(line, True, color)
-                OpenDU.screen.blit(textsurface,(xposition,startPositionY))
-                startPositionY += size
+        # Get Dimensions
+        for line in lines:
+            myfont = pygame.font.Font(font, size)
+            needed_height += myfont.get_linesize()
+            if myfont.size(line)[0] > needed_width:
+                needed_width = myfont.size(line)[0]
 
-        else: 
-            startPositionY = yposition-(lineQty * size)       
-            for line in lines:
-                myfont = pygame.font.Font(font, size)
-                textsurface = myfont.render(line, True, color)
-                OpenDU.screen.blit(textsurface,(xposition,yposition))
-                startPositionY += size
+        if return_size == True:
+            return (needed_width, needed_height)
 
+        # Anchor
+        if anchor == "left":
+            xposition = xposition
+        elif anchor == "right":
+            xposition = xposition - needed_width
+        elif anchor == "center":
+            xposition = xposition - (needed_width/2)
+
+        #rect = pygame.Rect(xposition, yposition, needed_width, needed_height)
+        #pygame.draw.rect(OpenDU.screen, color, rect)
+
+        # Print Final Text
+        for line in lines:
+            myfont = pygame.font.Font(font, size)
+            textsurface = myfont.render(line, True, color)
+            if align == "center":
+                startPositionX = ((needed_width - myfont.size(line)[0])/2) + xposition
+            elif align == "left":
+                startPositionX = xposition
+            elif align == "right":
+                startPositionX = (needed_width - myfont.size(line)[0]) + xposition
+            OpenDU.screen.blit(textsurface,(startPositionX,yposition))
+            yposition += size
 
     def keyPress():
 
@@ -181,10 +202,14 @@ class OpenDU:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE: #ESQ
                     OpenDU.kill()
-                if event.key == pygame.K_TAB:    #TAB
+                elif event.key == pygame.K_TAB:    #TAB
                     OpenDU.frameChange()
-                if event.key == pygame.K_RETURN:
+                elif event.key == pygame.K_RETURN:
                     OpenDU.frameFullscreen()
+                elif event.key == pygame.K_BACKSPACE:
+                    OpenDU.scratchpadText = OpenDU.scratchpadText[:-1]
+                else:
+                    OpenDU.scratchpadText += str(pygame.key.name(event.key)).upper()                    
             if event.type == pygame.QUIT:
                 OpenDU.kill()
             if event.type == pygame.VIDEORESIZE:

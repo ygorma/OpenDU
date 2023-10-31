@@ -13,13 +13,22 @@ class Suite:
     keyboardIsOpen = 0
     keyboardText = None
     keyboardFunction = None
+    keyboardButton = None
+    scratchpadText = ""
     font = OpenDU.suitePath + "fonts\\Geneva.ttf"
     fontSize = 20
+    activeAta = 00
 
-    activeAirport = OpenDU.config.get('lastflight','airport')
-    activeRunway = OpenDU.config.get('lastflight','runway')
     runwaysCache = ""
-    scratchpadText = ""
+
+    # Read INI file
+    config = configparser.ConfigParser()
+    config.read(OpenDU.suitePath + 'instructor.ini')
+
+    activeAirport = config.get('lastflight','airport')
+    activeRunway = config.get('lastflight','runway')
+    activeGate = config.get('lastflight','gate')
+    activeAta = config.get('lastflight','activeAta')
 
     def init(page):
 
@@ -30,12 +39,11 @@ class Suite:
     def button(text, font, fontSize, color, xposition, yposition, xsize, ysize, border, function, active=0):
 
         # Fake Text
-        myfont = pygame.font.Font(font, fontSize)
-        textsurface = myfont.render(text, True, color)
+        textsurface = OpenDU.text(text, font, size=fontSize, return_size=True)
 
         # Adjustments
-        textXposition = xposition + xsize/2 - textsurface.get_rect().width/2
-        textYposition = yposition + (ysize/2) - (textsurface.get_rect().height/2)
+        textXposition = xposition + xsize/2 - textsurface[0]/2
+        textYposition = yposition + (ysize/2) - (textsurface[1]/2)
 
         # Colors
         COLOR_BUTTON = (82,74,66)
@@ -71,12 +79,11 @@ class Suite:
     def buttonDialog(text, font, fontSize, color, xposition, yposition, xsize, ysize, border, function):
 
         # Fake Text
-        myfont = pygame.font.Font(font, fontSize)
-        textsurface = myfont.render(text, True, color)
+        textsurface = OpenDU.text(text, font, size=fontSize, return_size=True)
 
         # Adjustments
-        textXposition = xposition + xsize/2 - textsurface.get_rect().width/2
-        textYposition = yposition + (ysize/2) - (textsurface.get_rect().height/2)
+        textXposition = xposition + xsize/2 - textsurface[0]/2
+        textYposition = yposition + (ysize/2) - (textsurface[1]/2)
 
         # Colors
         COLOR_BUTTON = (82,74,66)
@@ -167,13 +174,15 @@ class Suite:
     def renderMenu():
 
         options = [
-            ["Main","OpenDU.switchPage('main')","main"], 
             ["Positioning","OpenDU.switchPage('positioning')","positioning"],
             ["Weight & Balance","OpenDU.switchPage(page)","weightbalance"],
-            ["Weather","OpenDU.switchPage(page)","weather"],
-            ["Failures","OpenDU.switchPage(page)","failures"],
+            ["Services","OpenDU.switchPage('services')","services"], 
+            ["Environment","OpenDU.switchPage('environment')","environment"],
+            ["Failures","OpenDU.switchPage('failures')","failures"],
             ["Map","OpenDU.switchPage(page)","map"],
             ["Freeze","OpenDU.freezeSim()"],
+            ["Time Compressing","OpenDU.rateSim()"],
+            ["Logbook","OpenDU.logbook()"],
             ["Exit","OpenDU.kill()"]
         ]
 
@@ -199,7 +208,7 @@ class Suite:
 
     def alert(text, function, color):
 
-        print(2)
+        OpenDU.log('INFO', 'Alert: ' + text)
 
         Suite.dialogIsOpen = 1
         Suite.alertIsOpen = 1
@@ -208,6 +217,8 @@ class Suite:
         Suite.alertColor = color
 
     def alertClose(function):
+
+        OpenDU.log('INFO', 'Alert Closed')
 
         Suite.dialogIsOpen = 0
         Suite.alertIsOpen = 0
@@ -219,7 +230,9 @@ class Suite:
 
     def comboBox(title, function): 
 
-        # funtion must return a list
+        OpenDU.log('INFO', title + 'Clicked')
+
+        # function must return a list
 
         Suite.dialogIsOpen = 1
         Suite.comboBoxIsOpen = 1
@@ -228,14 +241,14 @@ class Suite:
 
     def comboBoxClose(var, string): 
 
-        setattr(Suite, var, ""+string+"")
+        setattr(Suite, var, ""+str(string)+"")
 
         Suite.dialogIsOpen = 0
         Suite.comboBoxIsOpen = 0
         Suite.comboBoxText = None
         Suite.comboBoxFunction = None
 
-    def keyboard(title, function): 
+    def keyboard(title, function, buttonText='Search'): 
 
         # funtion must return a list
 
@@ -243,15 +256,18 @@ class Suite:
         Suite.keyboardIsOpen = 1
         Suite.keyboardText = title
         Suite.keyboardFunction = function
+        Suite.keyboardButton = buttonText
+        Suite.scratchpadText = ""
 
     def keyboardClose(): 
 
-        print(1)
+        
 
         Suite.dialogIsOpen = 0
         Suite.keyboardIsOpen = 0
         Suite.keyboardText = None
         Suite.keyboardFunction = None
+        Suite.keyboardButton = None
 
     def dialogs():
 
@@ -273,12 +289,11 @@ class Suite:
                 COLOR_BUTTON_BORDER = (115,107,107)
 
                 # Fake Text
-                myfont = pygame.font.Font(Suite.font, Suite.fontSize)
-                textsurface = myfont.render(Suite.alertText, True, COLOR_TEXT)
+                textsurface = OpenDU.text(Suite.alertText, Suite.font, size=Suite.fontSize, return_size=True)
 
                 # Adjustments
-                textXposition = positionx + sizex/2 - textsurface.get_rect().width/2
-                textYposition = positiony + (sizey/2) - (textsurface.get_rect().height/2)
+                textXposition = positionx + sizex/2 - textsurface[0]/2
+                textYposition = positiony + (sizey/2) - (textsurface[1]/2)
 
                 # Main Rect With Border
                 Suite.div(positionx, positiony, sizex, sizey, Suite.alertColor)
@@ -303,11 +318,10 @@ class Suite:
                 COLOR_BUTTON_BORDER = (115,107,107)
 
                 # Fake Text
-                myfont = pygame.font.Font(Suite.font, Suite.fontSize)
-                textsurface = myfont.render(Suite.comboBoxText, True, COLOR_TEXT)
+                textsurface = OpenDU.text(Suite.comboBoxText, Suite.font, size=Suite.fontSize, return_size=True)
 
                 # Adjustments
-                textXposition = positionx + sizex/2 - textsurface.get_rect().width/2
+                textXposition = positionx + sizex/2 - textsurface[0]/2
 
                 # Text Placing
                 OpenDU.text(Suite.comboBoxText, Suite.font, COLOR_TEXT, textXposition, positiony - 50, Suite.fontSize)
@@ -330,26 +344,24 @@ class Suite:
                 COLOR_BUTTON_BORDER = (115,107,107)
 
                 # Fake Text
-                myfont = pygame.font.Font(Suite.font, Suite.fontSize)
-                textsurface = myfont.render(Suite.keyboardText, True, COLOR_TEXT)
+                textsurface = OpenDU.text(Suite.keyboardText, Suite.font, size=Suite.fontSize, return_size=True)
 
                 # Adjustments
-                textXposition = positionx + menuSizeX/2 - textsurface.get_rect().width/2
+                textXposition = positionx + menuSizeX/2 - textsurface[0]/2
 
                 # Menu Title
                 OpenDU.text(Suite.keyboardText, Suite.font, COLOR_TEXT, textXposition, positiony, Suite.fontSize)
 
                 # Scratchpad
                 positiony = positiony + 50
-                myfont = pygame.font.Font(Suite.font, Suite.fontSize)
-                textsurface = myfont.render(Suite.scratchpadText, True, COLOR_TEXT)
+                textsurface = OpenDU.text(Suite.scratchpadText, Suite.font, size=Suite.fontSize, return_size=True)
 
                 ysize = 60
                 border = 5
 
                 # Adjustments
-                textXposition = positionx + menuSizeX/2 - textsurface.get_rect().width/2
-                textYposition = positiony + (ysize/2) - (textsurface.get_rect().height/2)
+                textXposition = positionx + menuSizeX/2 - textsurface[0]/2
+                textYposition = positiony + (ysize/2) - (textsurface[1]/2)
 
                 # Colors
                 COLOR_BUTTON_BORDER = (115,107,107)
@@ -426,7 +438,7 @@ class Suite:
                 options = [
                     ["Clear", "Suite.scratchpad('CLEAR')"], 
                     ["Cancel", "Suite.keyboardClose()"], 
-                    ["Search", ""+Suite.keyboardFunction+""], 
+                    [Suite.keyboardButton, ""+Suite.keyboardFunction+""], 
                 ]
 
                 Suite.menu((82,74,66), menuMargin, menuSizeX, positionx, positiony + 30, 'left', 'top', 293.3, sizey, options, True)
@@ -446,16 +458,20 @@ class Suite:
         positiony = 0
         sizex = OpenDU.screen.get_width() * 0.1
         sizey = menuLimits[0]
-        clockTime = time.strftime('%H:%M:%S %p')
         COLOR_BORDER = (115,107,107)
 
+        # If Small, hide seconds
+        if sizex < 1400:
+            clockTime = time.strftime('%H:%M')
+        else:
+            clockTime = time.strftime('%H:%M:%S')
+
         # Fake Text
-        myfont = pygame.font.Font(Suite.font, Suite.fontSize)
-        textsurface = myfont.render(clockTime, True, (255,255,255))
+        textsurface = OpenDU.text(clockTime, Suite.font, size=Suite.fontSize, return_size=True)
 
         # Adjustments
-        textXposition = positionx + sizex/2 - textsurface.get_rect().width/2
-        textYposition = positiony + (sizey/2) - (textsurface.get_rect().height/2)
+        textXposition = positionx + sizex/2 - textsurface[0]/2
+        textYposition = positiony + (sizey/2) - (textsurface[1]/2)
 
         # Main Rect With Border
         Suite.div(positionx, positiony, sizex, sizey, (82,74,66))
@@ -487,7 +503,7 @@ class Suite:
 
         if Suite.scratchpadText == '':
             Suite.keyboardClose()
-            Suite.alert('Airport ICAO cannot be blank.','Suite.keyboard("Airport ICAO", "Suite.navdataSearchAirport()")',(82,74,66))
+            Suite.alert('Airport ICAO cannot be blank.','Suite.keyboard("Airport ICAO", "Suite.navdataSearchAirport()", "Search")',(82,74,66))
 
         else:
 
@@ -511,5 +527,44 @@ class Suite:
             else:
                 Suite.keyboardClose()
                 Suite.alert(Suite.scratchpadText+' was not found!','Suite.keyboard("Airport ICAO", "Suite.navdataSearchAirport()")',(82,74,66))
+    
+    def environmentSetTime():
 
-        
+        if Suite.scratchpadText == '':
+            Suite.keyboardClose()
+            Suite.alert('Time cannot be blank.','Suite.keyboard("Set Time (HLO)", "Suite.environmentSetTime()", "Set")',(82,74,66))
+
+        else:
+
+            try:
+                time.strptime(Suite.scratchpadText, '%H:%M')
+                Suite.keyboardClose()
+
+            except ValueError:
+                Suite.keyboardClose()
+                Suite.alert('Wrong Format! Correct format is HH:MM.','Suite.keyboard("Set Time (HLO)", "Suite.environmentSetTime()", "Set")',(82,74,66))
+    
+    def environmentSetDate():
+
+        if Suite.scratchpadText == '':
+            Suite.keyboardClose()
+            Suite.alert('Date cannot be blank.','Suite.keyboard("Set Date", "Suite.environmentSetDate()", "Set")',(82,74,66))
+
+        else:
+
+            try:
+                time.strptime(Suite.scratchpadText, '%d/%m/%Y')
+                Suite.keyboardClose()
+
+            except ValueError:
+                Suite.keyboardClose()
+                Suite.alert('Wrong Format! Correct format is dd/mm/YYYY.','Suite.keyboard("Set Date", "Suite.environmentSetDate()", "Set")',(82,74,66))
+    
+    def ataSections():
+
+        return [
+            ["ATA 00 - GENERAL", "Suite.comboBoxClose('activeAta', '00')"], 
+            ["ATA 27 - FLIGHT CONTROLS", "Suite.comboBoxClose('activeAta', '27')"], 
+            ["ATA 28 - FUEL", "Suite.comboBoxClose('activeAta', '28')"],
+            ["Cancel", "Suite.comboBoxClose('activeAta', '"+str(Suite.activeAta)+"')"] 
+        ]
