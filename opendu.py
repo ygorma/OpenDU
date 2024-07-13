@@ -47,14 +47,14 @@ while True:
     imported = getattr(__import__(OpenDU.suitePackage, fromlist=[OpenDU.suite]), OpenDU.suite)
     imported.Suite.init(OpenDU.actualPage)
 
-    # Print FPS
-    OpenDU.fpsCounter()
-
     # Brightness Adjustment
     if OpenDU.brightness != 0:
         rect = pygame.Surface((OpenDU.screen.get_width(),OpenDU.screen.get_height()), pygame.SRCALPHA, 32)
         rect.fill((0, 0, 0, OpenDU.brightness))
         OpenDU.screen.blit(rect, (0,0))
+
+    # Print FPS
+    OpenDU.fpsCounter()
 
     # Update Screen
     pygame.display.update() 

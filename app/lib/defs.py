@@ -158,9 +158,20 @@ class OpenDU:
         needed_width = 0
         needed_height = 0
 
+        # Create font object one sigle time
+
+        font_shortname = os.path.basename(font)
+        font_shortname, sep, tail = font_shortname.partition('.')
+
+        try:
+            globals()[font_shortname + "_" + str(size)]
+        except:
+            globals()[font_shortname + "_" + str(size)] = pygame.font.Font(font, size)
+
+        myfont = globals()[font_shortname + "_" + str(size)]
+
         # Get Dimensions
         for line in lines:
-            myfont = pygame.font.Font(font, size)
             needed_height += myfont.get_linesize()
             if myfont.size(line)[0] > needed_width:
                 needed_width = myfont.size(line)[0]
@@ -181,7 +192,6 @@ class OpenDU:
 
         # Print Final Text
         for line in lines:
-            myfont = pygame.font.Font(font, size)
             textsurface = myfont.render(line, True, color)
             if align == "center":
                 startPositionX = ((needed_width - myfont.size(line)[0])/2) + xposition
@@ -217,6 +227,9 @@ class OpenDU:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     OpenDU.leftClick = 1
+                elif event.button == 3:
+                    # Open Context Menu
+                    OpenDU.doNothing()
 
         pygame.event.pump()
 
@@ -278,8 +291,9 @@ class OpenDU:
                 OpenDU.brightness = 255
     
     def fpsCounter():
+        
+        OpenDU.clock.tick(OpenDU.config.getint('main','limitfps'))
 
         if OpenDU.config.getint('main','showfps') == 1:
-            OpenDU.clock.tick()
             fps = str(int(OpenDU.clock.get_fps()))
             OpenDU.text(fps, OpenDU.path + OpenDU.config.get('main','font'), (74,230,66), 10, 10, 15)

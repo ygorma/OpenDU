@@ -179,7 +179,7 @@ class Suite:
             ["Services","OpenDU.switchPage('services')","services"], 
             ["Environment","OpenDU.switchPage('environment')","environment"],
             ["Failures","OpenDU.switchPage('failures')","failures"],
-            ["Map","OpenDU.switchPage(page)","map"],
+            ["Map","OpenDU.switchPage('map')","map"],
             ["Freeze","OpenDU.freezeSim()"],
             ["Time Compressing","OpenDU.rateSim()"],
             ["Logbook","OpenDU.logbook()"],

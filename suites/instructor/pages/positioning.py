@@ -31,5 +31,20 @@ class Instructor:
 
         pushbackActions = Suite.menu((0,0,0), 20, 450, 430, pageBegin[0] + 50, 'left', 'top', 110, 110, options)
 
+        # Repositioning
+
+        height = 350
+        top_margin = quickActions[1]
+        line_3_top_margin = top_margin + height - (height/3)
+
+        Suite.button("3nm", Suite.font, Suite.fontSize, (255, 255, 255), 20, line_3_top_margin, 110, 110, 3, OpenDU.doNothing, active=0)
+
+        image = pygame.image.load(OpenDU.textures + 'runway.png')
+        scale = image.get_width()/image.get_height()
+        image = pygame.transform.scale(image, (scale * (height/1.5),height/1.5))
+        OpenDU.screen.blit(image, (100, top_margin))
+
+
+
         Suite.renderBottomMenu()
         Suite.dialogs()
